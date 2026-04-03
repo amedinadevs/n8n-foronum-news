@@ -16,7 +16,10 @@
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, 300]
+      "position": [
+        0,
+        300
+      ]
     },
     {
       "parameters": {
@@ -27,11 +30,14 @@
       "name": "Get Foronum Catalog",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [250, 300],
+      "position": [
+        250,
+        300
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -44,11 +50,14 @@
       "name": "Get Active Sources",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [600, 300],
+      "position": [
+        600,
+        300
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -61,7 +70,10 @@
       "name": "Loop Sources",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [850, 300]
+      "position": [
+        850,
+        300
+      ]
     },
     {
       "parameters": {
@@ -90,7 +102,10 @@
       "name": "Check Source Type",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1100, 300]
+      "position": [
+        1100,
+        300
+      ]
     },
     {
       "parameters": {
@@ -100,7 +115,10 @@
       "name": "Read RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
-      "position": [1350, 100]
+      "position": [
+        1350,
+        100
+      ]
     },
     {
       "parameters": {
@@ -110,7 +128,10 @@
       "name": "Normalize RSS",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1600, 100]
+      "position": [
+        1600,
+        100
+      ]
     },
     {
       "parameters": {
@@ -128,7 +149,10 @@
       "name": "Fetch HTML Page",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1350, 500]
+      "position": [
+        1350,
+        500
+      ]
     },
     {
       "parameters": {
@@ -159,7 +183,10 @@
       "name": "Extract HTML",
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
-      "position": [1600, 500]
+      "position": [
+        1600,
+        500
+      ]
     },
     {
       "parameters": {
@@ -169,7 +196,10 @@
       "name": "Normalize HTML",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1850, 500]
+      "position": [
+        1850,
+        500
+      ]
     },
     {
       "parameters": {
@@ -180,7 +210,10 @@
       "name": "Merge Discovery",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [1850, 300]
+      "position": [
+        1850,
+        300
+      ]
     },
     {
       "parameters": {
@@ -190,7 +223,10 @@
       "name": "Build Insert Queries",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2050, 300]
+      "position": [
+        2050,
+        300
+      ]
     },
     {
       "parameters": {
@@ -201,11 +237,14 @@
       "name": "Insert News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [2050, 100],
+      "position": [
+        2050,
+        100
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -218,11 +257,14 @@
       "name": "Update Source Time",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [2200, 100],
+      "position": [
+        2200,
+        100
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -235,11 +277,14 @@
       "name": "Get Discovered News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [2400, 300],
+      "position": [
+        2400,
+        300
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -270,7 +315,10 @@
       "name": "Has News?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [2600, 300]
+      "position": [
+        2600,
+        300
+      ]
     },
     {
       "parameters": {
@@ -281,7 +329,10 @@
       "name": "Loop News",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [2800, 200]
+      "position": [
+        2800,
+        200
+      ]
     },
     {
       "parameters": {
@@ -294,14 +345,17 @@
             }
           },
           "timeout": 30000
-        },
-        "onError": "continueOnFail"
+        }
       },
       "id": "a1b2c3d4-0018-4000-8000-000000000018",
       "name": "Fetch Article Page",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3000, 200]
+      "position": [
+        3000,
+        200
+      ],
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -311,7 +365,10 @@
       "name": "Clean & Prepare LLM",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3200, 200]
+      "position": [
+        3200,
+        200
+      ]
     },
     {
       "parameters": {
@@ -322,11 +379,14 @@
       "name": "Store Raw HTML",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [3400, 0],
+      "position": [
+        3400,
+        0
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -334,8 +394,7 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "none",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -358,7 +417,10 @@
       "name": "Call OpenAI Classify",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3400, 200]
+      "position": [
+        3400,
+        200
+      ]
     },
     {
       "parameters": {
@@ -368,7 +430,10 @@
       "name": "Parse Classification",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3600, 200]
+      "position": [
+        3600,
+        200
+      ]
     },
     {
       "parameters": {
@@ -397,7 +462,10 @@
       "name": "Score >= 40?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [3800, 200]
+      "position": [
+        3800,
+        200
+      ]
     },
     {
       "parameters": {
@@ -407,7 +475,10 @@
       "name": "Build Reject Query",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [4000, 500]
+      "position": [
+        4000,
+        500
+      ]
     },
     {
       "parameters": {
@@ -418,11 +489,14 @@
       "name": "Reject News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [4200, 500],
+      "position": [
+        4200,
+        500
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -434,7 +508,10 @@
       "name": "Build Link Query",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [4000, 200]
+      "position": [
+        4000,
+        200
+      ]
     },
     {
       "parameters": {
@@ -445,11 +522,14 @@
       "name": "Find Links",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [4200, 200],
+      "position": [
+        4200,
+        200
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -461,7 +541,10 @@
       "name": "Build Enrich Query",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [4400, 200]
+      "position": [
+        4400,
+        200
+      ]
     },
     {
       "parameters": {
@@ -472,11 +555,14 @@
       "name": "Enrich News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [4600, 200],
+      "position": [
+        4600,
+        200
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -489,11 +575,14 @@
       "name": "Get Enriched News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [4800, 300],
+      "position": [
+        4800,
+        300
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -524,7 +613,10 @@
       "name": "Has Enriched?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [5000, 300]
+      "position": [
+        5000,
+        300
+      ]
     },
     {
       "parameters": {
@@ -535,7 +627,10 @@
       "name": "Loop Articles",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [5200, 200]
+      "position": [
+        5200,
+        200
+      ]
     },
     {
       "parameters": {
@@ -545,14 +640,16 @@
       "name": "Prepare ES Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [5400, 200]
+      "position": [
+        5400,
+        200
+      ]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "none",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -575,7 +672,10 @@
       "name": "Generate ES Article",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [5600, 200]
+      "position": [
+        5600,
+        200
+      ]
     },
     {
       "parameters": {
@@ -585,7 +685,10 @@
       "name": "Parse ES Article",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [5800, 200]
+      "position": [
+        5800,
+        200
+      ]
     },
     {
       "parameters": {
@@ -595,7 +698,10 @@
       "name": "Prepare Languages",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [6000, 200]
+      "position": [
+        6000,
+        200
+      ]
     },
     {
       "parameters": {
@@ -606,7 +712,10 @@
       "name": "Loop Languages",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [6200, 200]
+      "position": [
+        6200,
+        200
+      ]
     },
     {
       "parameters": {
@@ -616,14 +725,16 @@
       "name": "Build Translation Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [6400, 200]
+      "position": [
+        6400,
+        200
+      ]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "none",
+        "authentication": "none",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -646,7 +757,10 @@
       "name": "Generate Translation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [6600, 200]
+      "position": [
+        6600,
+        200
+      ]
     },
     {
       "parameters": {
@@ -656,7 +770,10 @@
       "name": "Parse Translation",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [6800, 200]
+      "position": [
+        6800,
+        200
+      ]
     },
     {
       "parameters": {
@@ -666,7 +783,10 @@
       "name": "Collect & Validate",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [6400, 500]
+      "position": [
+        6400,
+        500
+      ]
     },
     {
       "parameters": {
@@ -677,11 +797,14 @@
       "name": "Insert Article",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [6600, 500],
+      "position": [
+        6600,
+        500
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -693,7 +816,10 @@
       "name": "Insert Translations",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [6800, 500]
+      "position": [
+        6800,
+        500
+      ]
     },
     {
       "parameters": {
@@ -704,11 +830,14 @@
       "name": "Execute Translation Insert",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [7000, 500],
+      "position": [
+        7000,
+        500
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -721,11 +850,14 @@
       "name": "Update News Status",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [7200, 500],
+      "position": [
+        7200,
+        500
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -738,11 +870,14 @@
       "name": "Get Ready Articles",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [7400, 300],
+      "position": [
+        7400,
+        300
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -773,7 +908,10 @@
       "name": "Has Ready?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [7600, 300]
+      "position": [
+        7600,
+        300
+      ]
     },
     {
       "parameters": {
@@ -784,7 +922,10 @@
       "name": "Loop Publish",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [7800, 200]
+      "position": [
+        7800,
+        200
+      ]
     },
     {
       "parameters": {
@@ -794,7 +935,10 @@
       "name": "Build Publish Queries",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [8000, 200]
+      "position": [
+        8000,
+        200
+      ]
     },
     {
       "parameters": {
@@ -805,11 +949,14 @@
       "name": "Publish to Foronum",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [8200, 200],
+      "position": [
+        8200,
+        200
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -822,11 +969,14 @@
       "name": "Mark Published",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [8400, 200],
+      "position": [
+        8400,
+        200
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -839,11 +989,14 @@
       "name": "Mark News Published",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [8600, 200],
+      "position": [
+        8600,
+        200
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     },
@@ -855,7 +1008,10 @@
       "name": "Build Email",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [8800, 300]
+      "position": [
+        8800,
+        300
+      ]
     },
     {
       "parameters": {
@@ -869,13 +1025,11 @@
       "name": "Send Email",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
-      "position": [9000, 300],
-      "credentials": {
-        "smtp": {
-          "id": "SMTP_CREDENTIAL_ID",
-          "name": "SMTP Email"
-        }
-      }
+      "position": [
+        9000,
+        300
+      ],
+      "disabled": true
     },
     {
       "parameters": {
@@ -886,11 +1040,14 @@
       "name": "Log Summary",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
-      "position": [9200, 300],
+      "position": [
+        9200,
+        300
+      ],
       "credentials": {
         "mySql": {
-          "id": "FORONUM_MYSQL_CREDENTIAL_ID",
-          "name": "Foronum MySQL"
+          "id": "ayDTnm75zHVOkDH0",
+          "name": "foronum_n8n"
         }
       }
     }
