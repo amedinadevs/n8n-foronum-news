@@ -12,31 +12,32 @@
           ]
         }
       },
-      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "id": "5d8ad194-728c-4289-86a5-093bceccb991",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        0,
-        300
+        3520,
+        928
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT 'cache_ready' AS phase_status"
+        "query": "SELECT 'cache_ready' AS phase_status",
+        "options": {}
       },
-      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "id": "41b3a827-cd7b-4dac-9c05-d7645db0d665",
       "name": "Get Foronum Catalog",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        250,
-        300
+        3776,
+        928
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -44,35 +45,35 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT * FROM fn_news_sources WHERE is_active = 1"
+        "query": "SELECT * FROM fn_news_sources WHERE is_active = 1",
+        "options": {}
       },
-      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "id": "f8ab49fc-e577-4420-bf9b-505e4bdbfa64",
       "name": "Get Active Sources",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        600,
-        300
+        4112,
+        928
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
     },
     {
       "parameters": {
-        "batchSize": 1,
         "options": {}
       },
-      "id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "id": "5327e447-ffcd-4f80-894b-3be3378fffdb",
       "name": "Loop Sources",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        850,
-        300
+        4368,
+        928
       ]
     },
     {
@@ -98,44 +99,45 @@
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "id": "dcd1c011-e718-49ac-ae47-d3b7f5b0cf42",
       "name": "Check Source Type",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        1100,
-        300
+        4624,
+        928
       ]
     },
     {
       "parameters": {
-        "url": "={{ $json.feed_url }}"
+        "url": "={{ $json.feed_url }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "id": "d2a4bf8e-6a55-4cea-8b55-f393c3d631a2",
       "name": "Read RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        1350,
-        100
-      ]
+        4864,
+        736
+      ],
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
         "jsCode": "const sourceId = $('Loop Sources').first().json.id;\nconst items = $input.all();\nreturn items.map(item => ({\n  json: {\n    source_id: sourceId,\n    title: item.json.title || '',\n    url: item.json.link || '',\n    published_at: item.json.isoDate || item.json.pubDate || null,\n    summary: (item.json.contentSnippet || item.json.content || '').substring(0, 500)\n  }\n}));"
       },
-      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "id": "dbc2d732-884c-4954-8adf-33dbe09a2eb3",
       "name": "Normalize RSS",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1600,
-        100
+        5120,
+        736
       ]
     },
     {
       "parameters": {
-        "method": "GET",
         "url": "={{ $json.base_url }}",
         "options": {
           "response": {
@@ -145,14 +147,15 @@
           }
         }
       },
-      "id": "a1b2c3d4-0008-4000-8000-000000000008",
+      "id": "f1727233-9fad-469a-a432-8e9394cd3b40",
       "name": "Fetch HTML Page",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1350,
-        500
-      ]
+        4864,
+        1136
+      ],
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -161,8 +164,7 @@
           "values": [
             {
               "key": "title",
-              "cssSelector": "h2 a, h3 a, .title a",
-              "returnValue": "text"
+              "cssSelector": "h2 a, h3 a, .title a"
             },
             {
               "key": "link",
@@ -172,78 +174,64 @@
             },
             {
               "key": "summary",
-              "cssSelector": "p, .summary, .excerpt",
-              "returnValue": "text"
+              "cssSelector": "p, .summary, .excerpt"
             }
           ]
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0009-4000-8000-000000000009",
+      "id": "9e304bcf-14a5-44ff-8178-0adfdc70a81a",
       "name": "Extract HTML",
       "type": "n8n-nodes-base.html",
       "typeVersion": 1.2,
       "position": [
-        1600,
-        500
+        5120,
+        1136
       ]
     },
     {
       "parameters": {
         "jsCode": "const sourceId = $('Loop Sources').first().json.id;\nconst baseUrl = $('Loop Sources').first().json.base_url || '';\nconst items = $input.all();\nreturn items.map(item => {\n  let url = item.json.link || '';\n  if (url && !url.startsWith('http')) {\n    try { url = new URL(url, baseUrl).href; } catch(e) { url = baseUrl + url; }\n  }\n  return { json: { source_id: sourceId, title: item.json.title || '', url: url, published_at: null, summary: (item.json.summary || '').substring(0, 500) } };\n});"
       },
-      "id": "a1b2c3d4-0010-4000-8000-000000000010",
+      "id": "4e212d59-8b56-48eb-b3ed-16cb47623eef",
       "name": "Normalize HTML",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1850,
-        500
-      ]
-    },
-    {
-      "parameters": {
-        "mode": "append",
-        "options": {}
-      },
-      "id": "a1b2c3d4-0011-4000-8000-000000000011",
-      "name": "Merge Discovery",
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
-      "position": [
-        1850,
-        300
+        5376,
+        1136
       ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst items = $input.all();\nfor (const item of items) {\n  const j = item.json;\n  item.json.sql_query = \"INSERT IGNORE INTO fn_news (source_id, title, url, url_hash, published_at, summary, status, created_at) VALUES (\"\n    + j.source_id + \", \"\n    + esc(j.title) + \", \"\n    + esc(j.url) + \", \"\n    + \"SHA2(\" + esc(j.url) + \", 256), \"\n    + (j.published_at ? esc(j.published_at) : \"NULL\") + \", \"\n    + esc(j.summary) + \", \"\n    + \"'discovered', NOW())\";\n}\nreturn items;"
       },
-      "id": "a1b2c3d4-0012-4000-8000-000000000012",
+      "id": "654d66a0-fb64-4873-8c69-69eac420eaae",
       "name": "Build Insert Queries",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2050,
-        300
+        5696,
+        1024
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.sql_query }}"
+        "query": "{{ $json.sql_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0013-4000-8000-000000000013",
+      "id": "08b1379d-b499-4fa1-82ae-f4b4b13e21dc",
       "name": "Insert News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        2050,
-        100
+        5568,
+        864
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -251,19 +239,20 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ 'UPDATE fn_news_sources SET last_scraped_at = NOW() WHERE id = ' + $('Loop Sources').first().json.id }}"
+        "query": "{{ 'UPDATE fn_news_sources SET last_scraped_at = NOW() WHERE id = ' + $('Loop Sources').first().json.id }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0014-4000-8000-000000000014",
+      "id": "6b0603d4-d942-49d6-aa6c-a19003cf171e",
       "name": "Update Source Time",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        2200,
-        100
+        5712,
+        848
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -271,19 +260,20 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT * FROM fn_news WHERE status = 'discovered' ORDER BY created_at ASC LIMIT 10"
+        "query": "SELECT * FROM fn_news WHERE status = 'discovered' ORDER BY created_at ASC LIMIT 10",
+        "options": {}
       },
-      "id": "a1b2c3d4-0015-4000-8000-000000000015",
+      "id": "95688fbc-5957-4c31-9e47-198594c7738c",
       "name": "Get Discovered News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        2400,
-        300
+        5232,
+        480
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -294,7 +284,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "loose",
+            "version": 1
           },
           "conditions": [
             {
@@ -311,32 +302,30 @@
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0016-4000-8000-000000000016",
+      "id": "8f2c43f7-9ab1-44e9-8043-8e39425c9a77",
       "name": "Has News?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        2600,
-        300
+        6192,
+        1104
       ]
     },
     {
       "parameters": {
-        "batchSize": 1,
         "options": {}
       },
-      "id": "a1b2c3d4-0017-4000-8000-000000000017",
+      "id": "09189352-fda0-4180-96fc-244b3705f835",
       "name": "Loop News",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2800,
-        200
+        6320,
+        832
       ]
     },
     {
       "parameters": {
-        "method": "GET",
         "url": "={{ $json.url }}",
         "options": {
           "response": {
@@ -347,13 +336,13 @@
           "timeout": 30000
         }
       },
-      "id": "a1b2c3d4-0018-4000-8000-000000000018",
+      "id": "70c2182a-3243-4e2d-96f6-3f4697d3b60f",
       "name": "Fetch Article Page",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3000,
-        200
+        6512,
+        928
       ],
       "onError": "continueRegularOutput"
     },
@@ -361,78 +350,80 @@
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst item = $input.first();\nconst prev = $('Loop News').first().json;\nlet html = item.json.data || '';\nhtml = html.replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '');\nhtml = html.replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '');\nhtml = html.replace(/<nav[^>]*>[\\s\\S]*?<\\/nav>/gi, '');\nhtml = html.replace(/<header[^>]*>[\\s\\S]*?<\\/header>/gi, '');\nhtml = html.replace(/<footer[^>]*>[\\s\\S]*?<\\/footer>/gi, '');\nlet text = html.replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim().substring(0, 5000);\n\nconst prompt = `You are a numismatic news analyst for Foronum. Analyze this article and extract entities + classify it.\n\nNEWS TITLE: ${prev.title}\nNEWS DATE: ${prev.published_at || 'Unknown'}\nARTICLE TEXT:\n${text}\n\nRULES:\n- New coin/banknote issues: score 80-100\n- Auction results, mint announcements: 50-79\n- Generic financial news: 0-39\n\nOUTPUT (strict JSON only, no markdown):\n{\n  \"entities\": {\"country\":null,\"denomination\":null,\"mint\":null,\"piece_type\":null,\"series\":null,\"year_referenced\":null,\"metal\":null,\"event_type\":null},\n  \"all_entities\": [],\n  \"score\": 0,\n  \"classification\": \"high|medium|low|reject\",\n  \"reasoning\": \"\",\n  \"seo_potential\": 0,\n  \"suggested_angle\": \"\"\n}`;\n\nconst htmlUpdateQuery = \"UPDATE fn_news SET raw_html = \" + esc(item.json.data || '') + \", updated_at = NOW() WHERE id = \" + prev.id;\n\nreturn [{ json: { ...prev, clean_text: text, llm_prompt: prompt, html_update_query: htmlUpdateQuery } }];"
       },
-      "id": "a1b2c3d4-0019-4000-8000-000000000019",
+      "id": "8472ffd2-2f80-4bca-8b58-7869f56da4de",
       "name": "Clean & Prepare LLM",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3200,
-        200
+        6736,
+        928
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.html_update_query }}"
+        "query": "{{ $json.html_update_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0020-4000-8000-000000000020",
+      "id": "902dc17c-68e0-4af6-9381-4c0f0c1ec2ab",
       "name": "Store Raw HTML",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        3400,
-        0
+        7008,
+        1328
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "none",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
+        "resource": "chat",
+        "operation": "message",
+        "model": "gpt-4o-mini",
+        "prompt": {
+          "messages": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENAI_API_KEY }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
+              "role": "user",
+              "content": "={{ $json.llm_prompt }}"
             }
           ]
         },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":$json.llm_prompt}],\"response_format\":{\"type\":\"json_object\"},\"temperature\":0.3}) }}",
-        "options": {}
+        "options": {
+          "temperature": 0.3,
+          "responseFormat": "json_object"
+        }
       },
-      "id": "a1b2c3d4-0021-4000-8000-000000000021",
+      "id": "5e9d77c1-52ba-4a81-91d5-753e6f13a853",
       "name": "Call OpenAI Classify",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
       "position": [
-        3400,
-        200
-      ]
+        7024,
+        928
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "KdiEeG4cYEphgUh5",
+          "name": "OpenAI account"
+        }
+      }
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst item = $input.first();\nconst prev = $('Clean & Prepare LLM').first().json;\nlet parsed;\ntry {\n  parsed = JSON.parse(item.json.choices[0].message.content);\n} catch(e) {\n  parsed = { score: 0, classification: 'reject', reasoning: 'Parse error', entities: {}, all_entities: [], seo_potential: 0, suggested_angle: '' };\n}\nconst e = parsed.entities || {};\nreturn [{ json: {\n  ...prev,\n  llm_score: parsed.score || 0,\n  llm_classification: parsed.classification || 'reject',\n  llm_reasoning: parsed.reasoning || '',\n  seo_potential: parsed.seo_potential || 0,\n  suggested_angle: parsed.suggested_angle || '',\n  country: e.country || null,\n  denomination: e.denomination || null,\n  mint: e.mint || null,\n  piece_type: e.piece_type || null,\n  series: e.series || null,\n  year_referenced: e.year_referenced || null,\n  metal: e.metal || null,\n  event_type: e.event_type || null,\n  entities_json: JSON.stringify(parsed.all_entities || [])\n}}];"
       },
-      "id": "a1b2c3d4-0022-4000-8000-000000000022",
+      "id": "ef7b11a9-b2bc-4666-b359-d5e18eef1f2e",
       "name": "Parse Classification",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3600,
-        200
+        7120,
+        320
       ]
     },
     {
@@ -458,133 +449,113 @@
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0023-4000-8000-000000000023",
+      "id": "bc7765fc-d3e0-43e0-aa2c-35802d8bb63b",
       "name": "Score >= 40?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3800,
-        200
+        7312,
+        320
       ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst j = $input.first().json;\nreturn [{ json: { sql_query: \"UPDATE fn_news SET status = 'rejected', llm_score = \" + j.llm_score + \", llm_classification = \" + esc(j.llm_classification) + \", llm_reasoning = \" + esc(j.llm_reasoning) + \", entities_json = \" + esc(j.entities_json) + \", updated_at = NOW() WHERE id = \" + j.id }}];"
       },
-      "id": "a1b2c3d4-0024-4000-8000-000000000024",
+      "id": "779ad0af-3207-439c-b3a3-45916e33109e",
       "name": "Build Reject Query",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4000,
-        500
+        7456,
+        576
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.sql_query }}"
+        "query": "{{ $json.sql_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0025-4000-8000-000000000025",
+      "id": "f607ee7c-5dca-462a-83b2-107e793a81d9",
       "name": "Reject News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        4200,
-        500
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        7648,
+        576
+      ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return \"''\";\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst j = $input.first().json;\nconst terms = [j.country, j.series, j.denomination, j.mint].filter(Boolean);\nif (terms.length === 0) terms.push(j.title);\nconst conditions = terms.map(t => \"LOWER(entity_name) LIKE CONCAT('%', LOWER(\" + esc(t) + \"), '%')\").join(' OR ');\nreturn [{ json: { ...j, link_query: \"SELECT * FROM fn_foronum_links WHERE is_active = 1 AND (\" + conditions + \") ORDER BY seo_priority DESC\" }}];"
       },
-      "id": "a1b2c3d4-0026-4000-8000-000000000026",
+      "id": "93723b50-44b8-458f-be65-c35d379fe247",
       "name": "Build Link Query",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4000,
-        200
+        7520,
+        320
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.link_query }}"
+        "query": "{{ $json.link_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0027-4000-8000-000000000027",
+      "id": "a3cba67e-7e41-48ef-bc94-454d01ec08ca",
       "name": "Find Links",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        4200,
-        200
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        7712,
+        320
+      ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst prev = $('Parse Classification').first().json;\nconst links = $input.all().map(i => i.json);\nconst languages = ['es', 'en', 'fr', 'de', 'it', 'pt'];\nconst priorityOrder = ['exact_coin', 'exact_banknote', 'series', 'country', 'topic'];\nconst resolved = {};\nfor (const lang of languages) {\n  resolved[lang] = links.filter(l => l.lang === lang)\n    .sort((a, b) => {\n      const ai = priorityOrder.indexOf(a.entity_type);\n      const bi = priorityOrder.indexOf(b.entity_type);\n      if (ai !== bi) return ai - bi;\n      return (b.seo_priority || 0) - (a.seo_priority || 0);\n    }).slice(0, 4).map(l => ({ entity_type: l.entity_type, entity_name: l.entity_name, url: l.url, slug: l.slug, seo_priority: l.seo_priority }));\n}\nconst linkCount = Math.max(...Object.values(resolved).map(a => a.length), 0);\nconst resolvedJson = JSON.stringify(resolved);\n\nconst sql = \"UPDATE fn_news SET \"\n  + \"clean_text = \" + esc(prev.clean_text) + \", \"\n  + \"entities_json = \" + esc(prev.entities_json) + \", \"\n  + \"country = \" + esc(prev.country) + \", \"\n  + \"denomination = \" + esc(prev.denomination) + \", \"\n  + \"mint = \" + esc(prev.mint) + \", \"\n  + \"piece_type = \" + esc(prev.piece_type) + \", \"\n  + \"series = \" + esc(prev.series) + \", \"\n  + \"year_referenced = \" + esc(prev.year_referenced) + \", \"\n  + \"metal = \" + esc(prev.metal) + \", \"\n  + \"event_type = \" + esc(prev.event_type) + \", \"\n  + \"llm_score = \" + prev.llm_score + \", \"\n  + \"llm_classification = \" + esc(prev.llm_classification) + \", \"\n  + \"llm_reasoning = \" + esc(prev.llm_reasoning) + \", \"\n  + \"seo_potential = \" + prev.seo_potential + \", \"\n  + \"resolved_links_json = \" + esc(resolvedJson) + \", \"\n  + \"link_count = \" + linkCount + \", \"\n  + \"status = 'enriched', \"\n  + \"updated_at = NOW() WHERE id = \" + prev.id;\n\nreturn [{ json: { ...prev, resolved_links: resolved, resolved_links_json: resolvedJson, link_count: linkCount, sql_query: sql }}];"
       },
-      "id": "a1b2c3d4-0028-4000-8000-000000000028",
+      "id": "a8c93b14-6093-4745-a5c1-bbb88e5871ab",
       "name": "Build Enrich Query",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4400,
-        200
+        7920,
+        320
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.sql_query }}"
+        "query": "{{ $json.sql_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0029-4000-8000-000000000029",
+      "id": "7fa93533-7e71-4f44-8e96-d32c5afa9b14",
       "name": "Enrich News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        4600,
-        200
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        8112,
+        320
+      ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT * FROM fn_news WHERE status = 'enriched' ORDER BY llm_score DESC LIMIT 5"
+        "query": "SELECT * FROM fn_news WHERE status = 'enriched' ORDER BY llm_score DESC LIMIT 5",
+        "options": {}
       },
-      "id": "a1b2c3d4-0030-4000-8000-000000000030",
+      "id": "5e2f6a3b-4c68-45b4-b09c-84aae369894a",
       "name": "Get Enriched News",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        4800,
-        300
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        7776,
+        832
+      ]
     },
     {
       "parameters": {
@@ -609,201 +580,204 @@
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0031-4000-8000-000000000031",
+      "id": "4c0f1d5d-07b5-4c5a-b74f-d6172bffd4ce",
       "name": "Has Enriched?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        5000,
-        300
+        7968,
+        832
       ]
     },
     {
       "parameters": {
-        "batchSize": 1,
         "options": {}
       },
-      "id": "a1b2c3d4-0032-4000-8000-000000000032",
+      "id": "3da56997-7fef-4f30-a326-774bd6b03acf",
       "name": "Loop Articles",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        5200,
-        200
+        8720,
+        720
       ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst item = $input.first().json;\nconst resolvedLinks = JSON.parse(item.resolved_links_json || '{}');\nconst esLinks = (resolvedLinks.es || []).map(l => '- ' + l.entity_type + ': \"' + l.entity_name + '\" -> ' + l.url).join('\\n');\n\nconst prompt = `Eres el redactor editorial IA de Foronum (foronum.com). Escribe un articulo en ESPANOL sobre esta noticia numismatica.\n\nDIRECTRICES:\n- Tono informativo, riguroso, accesible\n- 400-800 palabras\n- Incluir 2-4 enlaces internos con anchor text natural\n- NUNCA inventes URLs. Solo usa las proporcionadas.\n- Articulo sustancialmente original\n- Sugerir imagen destacada\n\nENLACES INTERNOS PARA ESPANOL:\n${esLinks}\n\nNOTICIA:\nTitulo: ${item.title}\nFuente: ${item.url} (citar, NO enlazar)\nEntidades: ${item.entities_json || '[]'}\nResumen: ${item.summary || ''}\nTexto: ${(item.clean_text || '').substring(0, 2000)}\n\nOUTPUT (JSON estricto, sin markdown):\n{\"title\":\"max 70 chars\",\"slug\":\"url-safe\",\"excerpt\":\"150-200 chars\",\"meta_description\":\"max 160 chars\",\"body_html\":\"HTML valido\",\"anchors_used\":[{\"text\":\"\",\"url\":\"\",\"entity_type\":\"\"}],\"featured_image_suggestion\":\"\"}`;\n\nreturn [{ json: { ...item, es_prompt: prompt, resolved_links: resolvedLinks }}];"
       },
-      "id": "a1b2c3d4-0033-4000-8000-000000000033",
+      "id": "c1ded497-55a2-4794-a6f0-963a6b94e5af",
       "name": "Prepare ES Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5400,
-        200
+        8912,
+        912
       ]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "none",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
+        "resource": "chat",
+        "operation": "message",
+        "model": "gpt-4o",
+        "prompt": {
+          "messages": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENAI_API_KEY }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
+              "role": "user",
+              "content": "={{ $json.es_prompt }}"
             }
           ]
         },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\"model\":\"gpt-4o\",\"messages\":[{\"role\":\"user\",\"content\":$json.es_prompt}],\"response_format\":{\"type\":\"json_object\"},\"temperature\":0.7,\"max_tokens\":3000}) }}",
-        "options": {}
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 3000,
+          "responseFormat": "json_object"
+        }
       },
-      "id": "a1b2c3d4-0034-4000-8000-000000000034",
+      "id": "c50482fb-d28f-4ee8-9364-c19905ba71c7",
       "name": "Generate ES Article",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
       "position": [
-        5600,
-        200
-      ]
+        9120,
+        912
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "KdiEeG4cYEphgUh5",
+          "name": "OpenAI account"
+        }
+      }
     },
     {
       "parameters": {
         "jsCode": "const item = $input.first().json;\nconst prev = $('Prepare ES Prompt').first().json;\nlet esArticle;\ntry { esArticle = JSON.parse(item.choices[0].message.content); }\ncatch(e) { esArticle = {title:'Error',slug:'error',excerpt:'',meta_description:'',body_html:'<p>Error</p>',anchors_used:[],featured_image_suggestion:''}; }\nreturn [{ json: { ...prev, es_article: esArticle, all_translations: { es: esArticle } }}];"
       },
-      "id": "a1b2c3d4-0035-4000-8000-000000000035",
+      "id": "eb70526d-0f6e-4be1-8459-a9798038d4e2",
       "name": "Parse ES Article",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5800,
-        200
+        9296,
+        912
       ]
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst langNames = {en:'English',fr:'French',de:'German',it:'Italian',pt:'Portuguese'};\nreturn ['en','fr','de','it','pt'].map(lang => ({\n  json: {\n    ...item,\n    target_lang: lang,\n    target_lang_name: langNames[lang],\n    target_links: (item.resolved_links[lang] || []).map(l => '- ' + l.entity_type + ': \"' + l.entity_name + '\" -> ' + l.url).join('\\n')\n  }\n}));"
+        "jsCode": "/**\n\nconst item = $input.first().json;\nconst langNames = {en:'English',fr:'French',de:'German',it:'Italian',pt:'Portuguese'};\nreturn ['en','fr','de','it','pt'].map(lang => ({\n  json: {\n    ...item,\n    target_lang: lang,\n    target_lang_name: langNames[lang],\n    target_links: (item.resolved_links[lang] || []).map(l => '- ' + l.entity_type + ': \"' + l.entity_name + '\" -> ' + l.url).join('\\n')\n  }\n}));\n * \n */\n\n\n\nconst item = $input.first().json;\nconst langNames = {en:'English',fr:'French',de:'German',it:'Italian',pt:'Portuguese'};\nreturn ['en','fr','de','it','pt'].map(lang => ({\n  json: {\n    ...item,\n    target_lang: lang,\n    target_lang_name: langNames[lang],\n    target_links: (item.resolved_links[lang] || []).map(l => '- ' + l.entity_type + ': \"' + l.entity_name + '\" -> ' + l.url).join('\\n')\n  }\n}));\n\n\n"
       },
-      "id": "a1b2c3d4-0036-4000-8000-000000000036",
+      "id": "14658bdd-a4bd-4790-8fad-3953d7572467",
       "name": "Prepare Languages",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6000,
-        200
+        9488,
+        912
       ]
     },
     {
       "parameters": {
-        "batchSize": 1,
         "options": {}
       },
-      "id": "a1b2c3d4-0037-4000-8000-000000000037",
+      "id": "b28aed69-5059-4dba-a256-f78a556a12d5",
       "name": "Loop Languages",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        6200,
-        200
+        9728,
+        480
       ]
     },
     {
       "parameters": {
         "jsCode": "const item = $input.first().json;\nconst es = item.es_article;\nconst prompt = `You are the editorial AI writer for Foronum. Generate a ${item.target_lang_name} version of this numismatic article.\n\nIMPORTANT: NOT a literal translation. Use ${item.target_lang_name} internal links provided. Include 2-4 internal links. Generate appropriate slug.\n\nREFERENCE (Spanish):\nTitle: ${es.title}\nBody: ${es.body_html}\n\nINTERNAL LINKS FOR ${item.target_lang.toUpperCase()}:\n${item.target_links}\n\nENTITIES: ${item.entities_json || '[]'}\n\nOUTPUT (strict JSON, no markdown):\n{\"title\":\"max 70 chars\",\"slug\":\"url-safe\",\"excerpt\":\"150-200 chars\",\"meta_description\":\"max 160 chars\",\"body_html\":\"valid HTML\",\"anchors_used\":[{\"text\":\"\",\"url\":\"\",\"entity_type\":\"\"}],\"featured_image_alt\":\"alt in ${item.target_lang_name}\"}`;\nreturn [{ json: { ...item, translation_prompt: prompt }}];"
       },
-      "id": "a1b2c3d4-0038-4000-8000-000000000038",
+      "id": "930322b9-de05-4259-8ec9-a83e0fc15885",
       "name": "Build Translation Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6400,
-        200
+        9952,
+        592
       ]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "none",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
+        "resource": "chat",
+        "operation": "message",
+        "model": "gpt-4o",
+        "prompt": {
+          "messages": [
             {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.OPENAI_API_KEY }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
+              "role": "user",
+              "content": "={{ $json.translation_prompt }}"
             }
           ]
         },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\"model\":\"gpt-4o\",\"messages\":[{\"role\":\"user\",\"content\":$json.translation_prompt}],\"response_format\":{\"type\":\"json_object\"},\"temperature\":0.7,\"max_tokens\":3000}) }}",
-        "options": {}
+        "options": {
+          "temperature": 0.7,
+          "maxTokens": 3000,
+          "responseFormat": "json_object"
+        }
       },
-      "id": "a1b2c3d4-0039-4000-8000-000000000039",
+      "id": "96b0d1f8-2025-4090-933d-55371c8796a3",
       "name": "Generate Translation",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
       "position": [
-        6600,
-        200
-      ]
+        10336,
+        688
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "KdiEeG4cYEphgUh5",
+          "name": "OpenAI account"
+        }
+      }
     },
     {
       "parameters": {
         "jsCode": "const item = $input.first().json;\nconst prev = $('Build Translation Prompt').first().json;\nlet translation;\ntry { translation = JSON.parse(item.choices[0].message.content); }\ncatch(e) { translation = {title:'Error',slug:'error',excerpt:'',meta_description:'',body_html:'<p>Error</p>',anchors_used:[],featured_image_alt:''}; }\nreturn [{ json: { ...prev, current_translation: translation, current_lang: prev.target_lang }}];"
       },
-      "id": "a1b2c3d4-0040-4000-8000-000000000040",
+      "id": "8d7d821a-bf67-499c-942c-fbf3d45547f8",
       "name": "Parse Translation",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6800,
-        200
+        10512,
+        688
       ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst item = $input.first().json;\nconst allTranslations = { es: item.es_article };\nconst parseOutputs = $('Parse Translation').all();\nfor (const o of parseOutputs) {\n  allTranslations[o.json.current_lang] = o.json.current_translation;\n}\n\nconst sourceText = (item.clean_text || '').toLowerCase();\nconst errors = [];\nlet worstOriginality = 100;\n\nfor (const lang of ['es','en','fr','de','it','pt']) {\n  const t = allTranslations[lang];\n  if (!t) { errors.push(lang + ': missing'); continue; }\n  if ((t.title || '').length > 70) errors.push(lang + ': title > 70 chars');\n  if ((t.meta_description || '').length > 160) errors.push(lang + ': meta > 160 chars');\n  const bodyText = (t.body_html || '').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim();\n  const wordCount = bodyText.split(' ').length;\n  if (wordCount < 300) errors.push(lang + ': body ' + wordCount + ' words (min 300)');\n  const linkCount = (t.anchors_used || []).length;\n  if (linkCount < 2) errors.push(lang + ': ' + linkCount + ' links (min 2)');\n  if (linkCount > 4) errors.push(lang + ': ' + linkCount + ' links (max 4)');\n  if (lang === 'es') {\n    const srcWords = new Set(sourceText.split(/\\s+/).filter(w => w.length > 3));\n    const artWords = new Set(bodyText.toLowerCase().split(/\\s+/).filter(w => w.length > 3));\n    const inter = [...srcWords].filter(w => artWords.has(w)).length;\n    const union = new Set([...srcWords, ...artWords]).size;\n    const sim = union > 0 ? inter / union : 0;\n    worstOriginality = Math.round((1 - sim) * 100);\n    if (sim > 0.6) errors.push('es: too similar (' + Math.round(sim*100) + '%)');\n  }\n}\n\nconst isValid = errors.length === 0;\nconst validationNotes = errors.join('; ') || 'All OK';\n\nlet sql;\nif (isValid) {\n  sql = \"INSERT INTO fn_articles (news_id, source_news_url, status, validation_notes, originality_score, created_at) VALUES (\"\n    + item.id + \", \" + esc(item.url) + \", 'validated', \" + esc(validationNotes) + \", \" + worstOriginality + \", NOW())\";\n} else {\n  sql = \"INSERT INTO fn_articles (news_id, source_news_url, status, validation_notes, originality_score, created_at) VALUES (\"\n    + item.id + \", \" + esc(item.url) + \", 'failed', \" + esc(validationNotes) + \", \" + worstOriginality + \", NOW())\";\n}\n\nconst translationQueries = [];\nfor (const lang of ['es','en','fr','de','it','pt']) {\n  const t = allTranslations[lang] || {};\n  translationQueries.push(\n    \"INSERT INTO fn_article_translations (article_id, lang, title, slug, excerpt, meta_description, body_html, anchors_used_json, internal_link_count, featured_image_url, featured_image_alt, created_at) VALUES (\"\n    + \"LAST_INSERT_ID(), \"\n    + esc(lang) + \", \"\n    + esc(t.title || '') + \", \"\n    + esc(t.slug || '') + \", \"\n    + esc(t.excerpt || '') + \", \"\n    + esc(t.meta_description || '') + \", \"\n    + esc(t.body_html || '') + \", \"\n    + esc(JSON.stringify(t.anchors_used || [])) + \", \"\n    + (t.anchors_used || []).length + \", \"\n    + \"NULL, \"\n    + esc(t.featured_image_alt || t.featured_image_suggestion || '') + \", \"\n    + \"NOW())\"\n  );\n}\n\nconst newsStatus = isValid ? 'article_ready' : 'error';\nconst newsUpdate = \"UPDATE fn_news SET status = '\" + newsStatus + \"', updated_at = NOW() WHERE id = \" + item.id;\n\nreturn [{ json: {\n  ...item,\n  validation_passed: isValid,\n  article_insert_query: sql,\n  translation_queries: translationQueries,\n  news_update_query: newsUpdate\n}}];"
       },
-      "id": "a1b2c3d4-0041-4000-8000-000000000041",
+      "id": "f7c825df-366b-4299-b75e-8efcc9c2084c",
       "name": "Collect & Validate",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6400,
-        500
+        9696,
+        144
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.article_insert_query }}"
+        "query": "{{ $json.article_insert_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0042-4000-8000-000000000042",
+      "id": "faabc102-f740-46b3-9ad1-b4dddccb9f1a",
       "name": "Insert Article",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        6600,
-        500
+        9888,
+        144
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -812,74 +786,59 @@
       "parameters": {
         "jsCode": "const item = $input.first().json;\nconst prev = $('Collect & Validate').first().json;\nreturn prev.translation_queries.map(q => ({ json: { sql_query: q }}));"
       },
-      "id": "a1b2c3d4-0043-4000-8000-000000000043",
+      "id": "99a4bcf6-169b-42aa-8e10-70102eb90552",
       "name": "Insert Translations",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6800,
-        500
+        10096,
+        144
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.sql_query }}"
+        "query": "{{ $json.sql_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0044-4000-8000-000000000044",
+      "id": "9700a1d3-dca6-448a-b120-4131b1b2036c",
       "name": "Execute Translation Insert",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        7000,
-        500
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        10288,
+        144
+      ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $('Collect & Validate').first().json.news_update_query }}"
+        "query": "{{ $('Collect & Validate').first().json.news_update_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0045-4000-8000-000000000045",
+      "id": "5b0e87f8-1ed4-45c9-86c9-a18dacbd3b9f",
       "name": "Update News Status",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        7200,
-        500
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        10496,
+        144
+      ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT a.*, n.url AS news_url FROM fn_articles a JOIN fn_news n ON a.news_id = n.id WHERE a.status = 'validated' LIMIT 3"
+        "query": "SELECT a.*, n.url AS news_url FROM fn_articles a JOIN fn_news n ON a.news_id = n.id WHERE a.status = 'validated' LIMIT 3",
+        "options": {}
       },
-      "id": "a1b2c3d4-0046-4000-8000-000000000046",
+      "id": "493e96b5-0736-47d8-b3a3-a444361847a6",
       "name": "Get Ready Articles",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        7400,
-        300
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        10912,
+        928
+      ]
     },
     {
       "parameters": {
@@ -904,58 +863,58 @@
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0047-4000-8000-000000000047",
+      "id": "f42b7527-d74f-4971-8d7b-034ae188e4c2",
       "name": "Has Ready?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        7600,
-        300
+        11120,
+        928
       ]
     },
     {
       "parameters": {
-        "batchSize": 1,
         "options": {}
       },
-      "id": "a1b2c3d4-0048-4000-8000-000000000048",
+      "id": "b1a82d69-9312-496d-b574-36d7ca803d63",
       "name": "Loop Publish",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        7800,
-        200
+        11440,
+        784
       ]
     },
     {
       "parameters": {
         "jsCode": "function esc(val) {\n  if (val === null || val === undefined) return 'NULL';\n  return \"'\" + String(val).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + \"'\";\n}\nconst j = $input.first().json;\nconst postInsert = \"INSERT INTO foronum_posts (type, status, author_id, source_url, created_at) VALUES ('news_article', 'published', 1, \" + esc(j.news_url || j.source_news_url) + \", NOW())\";\nconst statusUpdate = \"UPDATE fn_articles SET status = 'published', published_at = NOW(), updated_at = NOW() WHERE id = \" + j.id;\nconst newsUpdate = \"UPDATE fn_news SET status = 'published', updated_at = NOW() WHERE id = \" + j.news_id;\nreturn [{ json: { ...j, post_insert_query: postInsert, status_update_query: statusUpdate, news_update_query: newsUpdate }}];"
       },
-      "id": "a1b2c3d4-0049-4000-8000-000000000049",
+      "id": "2a26e706-8c87-4f4b-bfe1-76d58e7f8c8e",
       "name": "Build Publish Queries",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8000,
-        200
+        11840,
+        944
       ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.post_insert_query }}"
+        "query": "{{ $json.post_insert_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0050-4000-8000-000000000050",
+      "id": "e78d6b6a-8d48-427e-ab63-733e6011f86f",
       "name": "Publish to Foronum",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        8200,
-        200
+        12032,
+        944
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -963,90 +922,81 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.status_update_query }}"
+        "query": "{{ $json.status_update_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0051-4000-8000-000000000051",
+      "id": "c6fecfe7-559a-4063-ae00-67197292f1f7",
       "name": "Mark Published",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        8400,
-        200
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        12208,
+        944
+      ]
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "={{ $json.news_update_query }}"
+        "query": "{{ $json.news_update_query }}",
+        "options": {}
       },
-      "id": "a1b2c3d4-0052-4000-8000-000000000052",
+      "id": "74649ea7-019b-453d-a427-30eb81544361",
       "name": "Mark News Published",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        8600,
-        200
-      ],
-      "credentials": {
-        "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
-          "name": "foronum_n8n"
-        }
-      }
+        12384,
+        944
+      ]
     },
     {
       "parameters": {
         "jsCode": "const articles = $('Get Ready Articles').all();\nconst count = articles.length;\nlet body = '<h2>Pipeline Foronum ejecutado</h2>';\nbody += '<p>Articulos publicados: ' + count + '</p>';\nfor (const a of articles) {\n  body += '<p>- ' + (a.json.source_news_url || a.json.news_url || '') + '</p>';\n}\nbody += '<p><em>Generado automaticamente por n8n-foronum</em></p>';\nreturn [{ json: { email_subject: '[Foronum] Pipeline: ' + count + ' articulos', email_body: body }}];"
       },
-      "id": "a1b2c3d4-0053-4000-8000-000000000053",
+      "id": "15ce4f82-d99d-4f1a-a7b9-41b35179bb06",
       "name": "Build Email",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8800,
-        300
+        12320,
+        512
       ]
     },
     {
       "parameters": {
         "toEmail": "editorial@foronum.com",
         "subject": "={{ $json.email_subject }}",
-        "emailType": "html",
         "html": "={{ $json.email_body }}",
         "options": {}
       },
-      "id": "a1b2c3d4-0054-4000-8000-000000000054",
+      "id": "2c057f89-4959-48c2-aa6e-f9a0343c77dc",
       "name": "Send Email",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        9000,
-        300
+        12592,
+        720
       ],
+      "webhookId": "c87f4c94-cf85-462b-9d5a-9a08c5d4ff86",
       "disabled": true
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO fn_pipeline_log (workflow_name, step, level, message, created_at) VALUES ('foronum_news_pipeline', 'complete', 'info', 'Pipeline execution completed', NOW())"
+        "query": "INSERT INTO fn_pipeline_log (workflow_name, step, level, message, created_at) VALUES ('foronum_news_pipeline', 'complete', 'info', 'Pipeline execution completed', NOW())",
+        "options": {}
       },
-      "id": "a1b2c3d4-0055-4000-8000-000000000055",
+      "id": "24e78fe7-12f6-4753-88ff-1bad203d1982",
       "name": "Log Summary",
       "type": "n8n-nodes-base.mySql",
       "typeVersion": 2.4,
       "position": [
-        9200,
-        300
+        12144,
+        400
       ],
       "credentials": {
         "mySql": {
-          "id": "ayDTnm75zHVOkDH0",
+          "id": "8eM5p9poEjOmPFQF",
           "name": "foronum_n8n"
         }
       }
@@ -1130,6 +1080,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Loop Sources",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -1137,7 +1094,7 @@
       "main": [
         [
           {
-            "node": "Merge Discovery",
+            "node": "Build Insert Queries",
             "type": "main",
             "index": 0
           }
@@ -1149,6 +1106,13 @@
         [
           {
             "node": "Extract HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Sources",
             "type": "main",
             "index": 0
           }
@@ -1167,17 +1131,6 @@
       ]
     },
     "Normalize HTML": {
-      "main": [
-        [
-          {
-            "node": "Merge Discovery",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Merge Discovery": {
       "main": [
         [
           {
@@ -1712,18 +1665,12 @@
       ]
     }
   },
-  "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
   },
-  "tags": [
-    {
-      "name": "foronum"
-    },
-    {
-      "name": "pipeline"
-    }
-  ],
-  "pinData": {},
-  "versionId": "1"
+  "staticData": null,
+  "pinData": {}
 }

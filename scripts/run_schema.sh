@@ -53,4 +53,4 @@ SELECT 'fn_news_sources' AS tabla, COUNT(*) AS registros FROM fn_news_sources
 UNION ALL
 SELECT 'fn_foronum_links', COUNT(*) FROM fn_foronum_links
 UNION ALL
-SELECT 'fn_news_raw', COUNT(*) FROM fn_news_raw;"
+SELECT 'fn_news', COUNT(*) FROM fn_news;"

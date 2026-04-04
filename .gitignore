@@ -16,3 +16,4 @@ node_modules/
 secrets/
 postgres_data/
 n8n_data/
+.claude/
